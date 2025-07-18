@@ -1,0 +1,8 @@
+.layout {
+  display: flex;
+  overflow-y: hidden;
+  max-block-size: 100dvb;
+  background-color: var(--background-950);
+  color: var(--text-50);
+  flex-direction: row;
+}

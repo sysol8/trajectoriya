@@ -1,0 +1,32 @@
+.card {
+  background-color: var(--accent-900);
+  display: flex;
+  border-radius: 0.8rem;
+  padding-block: 0.8rem;
+  padding-inline: 1.2rem;
+  block-size: 100%;
+  inline-size: 100%;
+  overflow-y: auto;
+}
+
+.text {
+  flex-grow: 1;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.textContent {
+  font-size: 1.6rem;
+}
+
+.color {
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  block-size: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

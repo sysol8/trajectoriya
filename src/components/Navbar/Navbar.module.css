@@ -1,0 +1,30 @@
+.nav {
+  min-inline-size: 24rem;
+  max-inline-size: 32rem;
+  border-inline-end: 2px solid var(--secondary-600);
+  font-size: 1.6rem;
+  overflow-y: auto;
+  block-size: 100dvb;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.item {
+  transition: background-color 0.2s ease-out;
+
+  &:hover {
+    background-color: var(--secondary-600);
+  }
+}
+
+.link {
+  padding-block: 2rem;
+  padding-inline: 1rem 0.4rem;
+  display: inline-block;
+  block-size: 100%;
+  inline-size: 100%;
+}
