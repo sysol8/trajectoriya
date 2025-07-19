@@ -12,7 +12,9 @@ html {
 }
 
 body {
-  font-family: "Open Sans Variable", Arial, Helvetica, sans-serif;
+  font-family: "Arimo Variable", Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ul {

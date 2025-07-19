@@ -9,3 +9,4 @@ export interface ICar {
     longitude: number
 }
 
+export type TCoordinates = [number, number][]

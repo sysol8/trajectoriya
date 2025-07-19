@@ -19,6 +19,7 @@
 
 .map {
   background-color: var(--accent-900);
+  block-size: 0;
 }
 
 .open {

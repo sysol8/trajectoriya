@@ -6,8 +6,9 @@
   grid-auto-rows: minmax(24rem, 1fr);
   row-gap: 1.6rem;
   column-gap: 2rem;
-  padding-block: 1.6rem;
+  padding-block: 1.6rem 7.6rem;
   padding-inline: 2rem;
+  scroll-behavior: smooth;
 
   --scrollbar-width: 0.8rem;
 }

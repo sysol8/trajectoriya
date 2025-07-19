@@ -1,73 +1,51 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, memo } from "react";
+import { Map, Marker } from "@2gis/mapgl/global";
+import { load } from "@2gis/mapgl";
 import styles from "./CarMap.module.css";
-import type { ICar } from "../../utils/types";
+import type { TCoordinates } from "../../utils/types";
+import type { ReactElement } from "react";
 
 interface CarMapProps {
-  data: ICar[];
+  coordinates: TCoordinates;
 }
 
-declare global {
-  interface Window {
-    ymaps: any;
-  }
-}
-
-function CarMap({ data }: CarMapProps) {
-  const [open, setOpen] = useState<boolean>(false);
-  const scriptApiKey: string = import.meta.env.API_KEY
-  const mapRef = useRef<any>(null);
-
+function CarMap({ coordinates }: CarMapProps): ReactElement {
   useEffect(() => {
-    const loadYandexMap = () => {
-      return new Promise<void>((resolve, reject) => {
-        if (window.ymaps) {
-          resolve();
-          return;
-        }
+    let map: Map;
+    let markers: Marker[] = [];
 
-        const script = document.createElement("script");
-        script.src = `https://api-maps.yandex.ru/2.1/?apikey=${scriptApiKey}&lang=ru_RU`;
-        script.type = "text/javascript";
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error("Ошибка при загрузке карты"));
-        document.head.appendChild(script);
+    load().then((mapglAPI) => {
+      map = new mapglAPI.Map("map", {
+        center: [59.938848, 30.314798],
+        zoom: 9,
+        key: import.meta.env.API_KEY,
       });
-    };
 
-    loadYandexMap().then(() => {
-      window.ymaps.ready(() => {
-        const map = new window.ymaps.Map("map", {
-          center: [55.76, 37.64],
-          zoom: 10,
-        });
-
-        data.forEach((car) => {
-          const placemark = new window.ymaps.Placemark(
-            [car.latitude, car.longitude],
-            {
-              balloonContent: `${car.name} ${car.model}`,
-            },
-          );
-          map.geoObjects.add(placemark);
-        });
-        mapRef.current = map;
+      markers = coordinates.map((coords) => {
+        return new mapglAPI.Marker(map, { coordinates: coords });
       });
     });
-  }, [data]);
 
-  useEffect(() => {
-    if (!open || !mapRef.current) return;
-
-    const timeout = setTimeout(() => {
-      mapRef.current.container.fitToViewport();
-    }, 100);
-
-    return () => clearTimeout(timeout);
-  }, [open]);
-
+    return () => {
+      if (map) {
+        markers.forEach((marker) => marker.destroy?.());
+        map.destroy();
+      }
+    };
+  }, [coordinates]);
 
   return (
-    <div className={styles.container}>
+    <div style={{ width: "100%", height: "100%" }}>
+      <MapWrapper />
+    </div>
+  );
+}
+
+const MapWrapper = memo(function MapWrapper() {
+  const [open, setOpen] = useState<boolean>(true);
+
+  return (
+    <div className={`${styles.container}`}>
       <div className={styles.hidden}>
         <button className={styles.button} onClick={() => setOpen(!open)}>
           ^
@@ -79,6 +57,6 @@ function CarMap({ data }: CarMapProps) {
       ></div>
     </div>
   );
-}
+});
 
 export default CarMap;
