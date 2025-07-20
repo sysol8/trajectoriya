@@ -1,8 +1,27 @@
 .layout {
   display: flex;
-  overflow-y: hidden;
-  max-block-size: 100dvb;
-  background-color: var(--background-950);
-  color: var(--text-50);
   flex-direction: row;
+  overflow-y: hidden;
+  color: var(--text-50);
+  background-color: var(--background-950);
+  max-block-size: 100dvb;
+}
+
+.main {
+  display: flex;
+
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2rem;
+  padding-inline: 2rem;
+  padding-block: 1.6rem 2.4rem;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  --scrollbar-width: 0.8rem;
+}
+
+.subheading {
+  font-size: 1.8rem;
+  justify-self: center;
+  padding-block-end: 1.2rem;
 }
