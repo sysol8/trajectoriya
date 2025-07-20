@@ -1,0 +1,33 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: color-mix(in oklch, var(--background-950) 50%, transparent);
+  display: none;
+  backdrop-filter: blur(4px);
+}
+
+.popupOpen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  background-color: var(--accent-800);
+  border-radius: 0.8rem;
+  border: 1px solid var(--accent-100);
+  font-size: 1.6rem;
+  padding-block: 0.8rem;
+  padding-inline: 1.2rem;
+}
+
+.close {
+  position: absolute;
+  right: 1.2rem;
+}
