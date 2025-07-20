@@ -1,6 +1,6 @@
 .nav {
-  min-inline-size: 24rem;
-  max-inline-size: 32rem;
+  inline-size: 100%;
+  max-inline-size: 24rem;
   border-inline-end: 2px solid var(--secondary-600);
   font-size: 1.6rem;
   overflow-y: auto;
@@ -27,4 +27,10 @@
   display: inline-block;
   block-size: 100%;
   inline-size: 100%;
+}
+
+@media (width <= 425px) {
+  .nav {
+    display: none;
+  }
 }
