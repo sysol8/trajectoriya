@@ -43,7 +43,8 @@ select {
   outline: none;
 }
 
-input, textarea {
+input,
+textarea {
   color: inherit;
   font: inherit;
 }
