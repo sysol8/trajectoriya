@@ -1,12 +1,46 @@
 .card {
   background-color: var(--accent-900);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: 1fr min-content;
   border-radius: 0.8rem;
   padding-block: 0.8rem;
   padding-inline: 1.2rem;
   block-size: 100%;
   inline-size: 100%;
   overflow-y: auto;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border: 1px solid var(--accent-50);
+
+  &:hover {
+    transform: scale(1.02) translateZ(0.2rem);
+    box-shadow:
+      inset 0 2px 2px var(--accent-100),
+      0 2px 6px var(--accent-100);
+  }
+}
+
+.cardHovered {
+  animation: cardHovered 1.5s linear infinite;
+  box-shadow:
+    inset 2px 2px 4px var(--accent-200),
+    2px 4px 8px var(--accent-500);
+}
+
+@keyframes cardHovered {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.01);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .text {
@@ -16,10 +50,21 @@
 .heading {
   font-size: 2rem;
   font-weight: bold;
+  padding-block-end: 1.2rem;
 }
 
 .textContent {
   font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.colorContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.4rem;
 }
 
 .color {
@@ -29,4 +74,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid var(--accent-50);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.8rem;
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+
+.icon {
+  block-size: 2.4rem;
+  inline-size: 2.4rem;
 }
