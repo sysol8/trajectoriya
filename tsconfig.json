@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "typeRoots": ["./node_modules/@types"],
+    "types": ["vite-plugin-svgr/client"],
     "module": "esnext",
     "target": "es2017",
     "paths": {}
