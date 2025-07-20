@@ -1,11 +1,18 @@
 import styles from "./Card.module.css";
 import type { ICar } from "../../utils/types.ts";
-import type { ChangeEvent, FormEvent, FormEventHandler } from "react";
+// @ts-ignore
+import DeleteIcon from "../../assets/icons/delete.svg?react";
+// @ts-ignore
+import EditIcon from "../../assets/icons/edit.svg?react";
+/*import type { ChangeEvent, FormEvent, FormEventHandler } from "react";*/
 
 interface ICardProps extends ICar {
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
+  isHovered: boolean;
 }
+
+type editable = boolean;
 
 function Card({
   id,
@@ -16,12 +23,15 @@ function Card({
   price,
   latitude,
   longitude,
+  onEdit,
+  onDelete,
+  isHovered,
 }: ICardProps) {
-  const onDelete = () => {}
-  const onEdit = () => {}
-
   return (
-    <article className={styles.card} id={id}>
+    <article
+      className={`${styles.card} ${isHovered ? styles.cardHovered : ""}`}
+      id={id}
+    >
       <div className={styles.text}>
         <h2 className={styles.heading}>
           {name} {model}
@@ -32,7 +42,7 @@ function Card({
           Координаты: {longitude}, {latitude}
         </p>
       </div>
-      <div>
+      <div className={styles.colorContainer}>
         <span>Цвет</span>
         <span
           className={styles.color}
@@ -40,8 +50,12 @@ function Card({
         ></span>
       </div>
       <div className={styles.buttons}>
-        <button className={styles.button} onClick={onEdit}></button>
-        <button className={styles.button} onClick={onDelete}></button>
+        <button className={styles.button} onClick={onEdit}>
+          <EditIcon className={styles.icon} />
+        </button>
+        <button className={styles.button} onClick={onDelete}>
+          <DeleteIcon className={styles.icon} />
+        </button>
       </div>
     </article>
   );
