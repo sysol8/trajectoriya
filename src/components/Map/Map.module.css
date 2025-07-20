@@ -1,0 +1,23 @@
+.container {
+  border: 2px solid var(--accent-800);
+  max-block-size: 48rem;
+  max-inline-size: 64rem;
+  min-block-size: 32rem;
+  inline-size: 100%;
+  margin: 0 auto;
+}
+
+.map {
+  padding: 1.6rem;
+  background-color: var(--accent-900);
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+.open {
+  block-size: 40dvb;
+}
+
+.container:has(.open) .button {
+  transform: rotate(180deg);
+}
