@@ -1,18 +1,22 @@
 import styles from "./CarsLayout.module.css";
+import type { MapMarker } from "../utils/types.ts";
+import { useState } from "react";
 import useCars from "../hooks/useCars.ts";
 import Navbar from "../components/Navbar/Navbar.tsx";
 import CardList from "../components/CardList/CardList.tsx";
 import CarMap from "../components/Map/Map.tsx";
-import { useState } from "react";
 
 function CarsLayout() {
   const { cars, loading, error } = useCars();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
+  const carMarkers: MapMarker[] = cars.map((car) => ({
+    textContent: `${car.name} ${car.model}`,
+    coordinates: [car.longitude, car.latitude],
+  }))
+
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка</p>;
-
-  const markers = cars.map((car: ICar) => [car.longitude, car.latitude]);
 
   return (
     <div className={styles.layout}>
@@ -29,7 +33,7 @@ function CarsLayout() {
         </section>
         <section>
           <h2 className={styles.subheading}>Автомобили на карте</h2>
-          <CarMap coordinates={markers}></CarMap>
+          <CarMap markers={carMarkers}></CarMap>
         </section>
       </main>
     </div>
