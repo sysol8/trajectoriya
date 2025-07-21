@@ -1,18 +1,18 @@
 import { useEffect, memo, type NamedExoticComponent } from "react";
-import type { Map as MapGL, Marker } from "@2gis/mapgl/global";
+import type { Map as MapGL, Marker as MarkerGL } from "@2gis/mapgl/global";
 import { load } from "@2gis/mapgl";
 import styles from "./Map.module.css";
-import type { TCoordinates } from "../../utils/types";
+import type { MapMarker } from "../../utils/types";
 import type { ReactElement } from "react";
 
-interface CarMapProps {
-  coordinates: TCoordinates;
+interface MapProps {
+  markers: MapMarker[];
 }
 
-function Map({ coordinates }: CarMapProps): ReactElement {
+function Map({ markers }: MapProps): ReactElement {
   useEffect(() => {
     let map: MapGL;
-    let markers: Marker[] = [];
+    let mrkrs: MarkerGL[] = [];
 
     load().then((mapglAPI) => {
       map = new mapglAPI.Map("map", {
@@ -21,14 +21,14 @@ function Map({ coordinates }: CarMapProps): ReactElement {
         key: import.meta.env.VITE_API_KEY,
       });
 
-      markers = coordinates.map((coords): Marker => {
-        return new mapglAPI.Marker(map, { coordinates: coords });
+      mrkrs = markers.map((marker) => {
+        return new mapglAPI.Marker(map, { coordinates: marker.coordinates });
       });
     });
 
     return () => {
       if (map) {
-        markers.forEach((marker) => marker.destroy?.());
+        mrkrs.forEach((marker) => marker.destroy?.());
         map.destroy();
       }
     };
