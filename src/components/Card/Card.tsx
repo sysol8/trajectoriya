@@ -1,14 +1,14 @@
 import styles from "./Card.module.css";
-import Popup from "../Popup/Popup.tsx";
 import type { ICar, Field } from "../../utils/types.ts";
 import { useState } from "react";
+import Popup from "../Popup/Popup.tsx";
 // @ts-ignore
 import DeleteIcon from "../../assets/icons/delete.svg?react";
 // @ts-ignore
 import EditIcon from "../../assets/icons/edit.svg?react";
 
 interface ICardProps extends ICar {
-  onEdit: () => void;
+  onEdit?: () => void;
   onDelete: () => void;
   isHovered: boolean;
 }
