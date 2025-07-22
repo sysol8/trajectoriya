@@ -1,9 +1,9 @@
-import { useEffect, memo, type NamedExoticComponent } from "react";
-import type { Map as MapGL, Marker as MarkerGL } from "@2gis/mapgl/global";
-import { load } from "@2gis/mapgl";
 import styles from "./Map.module.css";
+import type { Map as MapGL, Marker as MarkerGL } from "@2gis/mapgl/global";
 import type { MapMarker } from "../../utils/types";
-import type { ReactElement } from "react";
+import type { ReactElement, NamedExoticComponent } from "react";
+import { load } from "@2gis/mapgl";
+import { useEffect, memo } from "react";
 
 interface MapProps {
   markers: MapMarker[];
@@ -22,7 +22,24 @@ function Map({ markers }: MapProps): ReactElement {
       });
 
       mrkrs = markers.map((marker) => {
-        return new mapglAPI.Marker(map, { coordinates: marker.coordinates });
+        const mark = new mapglAPI.Marker(map, {
+          coordinates: marker.coordinates,
+        });
+
+        let isLabelVisible = false;
+
+        mark.on("click", () => {
+          if (isLabelVisible) {
+            mark.setLabel({ text: "" });
+          } else {
+            mark.setLabel({
+              text: marker.textContent,
+            });
+          }
+          isLabelVisible = !isLabelVisible;
+        });
+
+        return mark;
       });
     });
 
@@ -35,7 +52,7 @@ function Map({ markers }: MapProps): ReactElement {
   }, []);
 
   return (
-    <div className={`${styles.container}`}>
+    <div className={styles.container}>
       <MapWrapper />
     </div>
   );
@@ -45,7 +62,7 @@ const MapWrapper: NamedExoticComponent = memo(
   (): ReactElement => {
     return (
       <>
-        <div id="map" className={`${styles.map}`}></div>
+        <div id="map" className={styles.map}></div>
       </>
     );
   },
