@@ -7,6 +7,27 @@
   column-gap: 2rem;
 }
 
+.sortControls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  font-size: 1.4rem;
+  padding-block-end: 1.2rem;
+}
+
+.select {
+  background-color: var(--accent-800);
+  border-radius: 0.4rem;
+  padding-block: 0.2rem;
+  padding-inline: 0.4rem;
+  min-inline-size: 6.4rem;
+  color: var(--text-50);
+
+  &:focus-visible {
+    outline: 1px solid var(--accent-500);
+  }
+}
+
 @media (width <= 1280px) {
   .cards {
     grid-template-columns: repeat(3, 1fr);
