@@ -13,7 +13,7 @@ function CarsLayout() {
   const carMarkers: MapMarker[] = cars.map((car) => ({
     textContent: `${car.name} ${car.model}`,
     coordinates: [car.longitude, car.latitude],
-  }))
+  }));
 
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>Ошибка</p>;
