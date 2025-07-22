@@ -1,5 +1,5 @@
-import { getCars } from "../api/cars.ts";
 import type { ICar } from "../utils/types.ts";
+import { getCars } from "../api/cars.ts";
 import { useState, useEffect } from "react";
 
 function useCars(): { cars: ICar[]; loading: boolean; error: unknown } {
