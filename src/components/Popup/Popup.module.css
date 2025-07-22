@@ -84,7 +84,7 @@
   padding-block: 0.4rem;
   padding-inline: 0.8rem;
 
-  &:hover{
+  &:hover {
     background-color: var(--accent-900);
   }
 
