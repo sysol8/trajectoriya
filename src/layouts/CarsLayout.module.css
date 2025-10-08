@@ -49,3 +49,15 @@
   font-size: 3.6rem;
   color: var(--text-50);
 }
+
+
+/* TODO: поправить секцию с картой, чтоб было красиво */
+.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .subheading {
+    text-align: center;
+  }
+}
