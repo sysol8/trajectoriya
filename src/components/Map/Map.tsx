@@ -1,55 +1,79 @@
 import styles from "./Map.module.css";
 import type { Map as MapGL, Marker as MarkerGL } from "@2gis/mapgl/global";
-import type { MapMarker } from "../../utils/types";
-import type { ReactElement, NamedExoticComponent } from "react";
+import {
+  memo,
+  type NamedExoticComponent,
+  type ReactElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { load } from "@2gis/mapgl";
-import { useEffect, memo } from "react";
+import { useBoundStore } from "../../store/store.ts";
 
-interface MapProps {
-  markers: MapMarker[];
-}
+function Map() {
+  const [ready, setReady] = useState(false);
 
-function Map({ markers }: MapProps): ReactElement {
+  const cars = useBoundStore((state) => state.cars);
+
+  const markersData = useMemo(
+    () =>
+      cars
+        .filter((car) => !(car.latitude === 0 && car.longitude === 0))
+        .map((car) => ({
+          coordinates: [car.longitude, car.latitude],
+          text: `${car.name} ${car.model}`,
+        })),
+    [cars],
+  );
+
+  const mapRef = useRef<MapGL | null>(null);
+  const apiRef = useRef<any>(null);
+
+  // инициализируем карту
   useEffect(() => {
-    let map: MapGL;
-    let mrkrs: MarkerGL[] = [];
-
     load().then((mapglAPI) => {
-      map = new mapglAPI.Map("map", {
+      setReady(true);
+      apiRef.current = mapglAPI;
+
+      mapRef.current = new mapglAPI.Map("map", {
         center: [30.31413, 59.93863],
         zoom: 9,
         key: import.meta.env.VITE_API_KEY,
       });
-
-      mrkrs = markers.map((marker) => {
-        const mark = new mapglAPI.Marker(map, {
-          coordinates: marker.coordinates,
-        });
-
-        let isLabelVisible = false;
-
-        mark.on("click", () => {
-          if (isLabelVisible) {
-            mark.setLabel({ text: "" });
-          } else {
-            mark.setLabel({
-              text: marker.textContent,
-            });
-          }
-          isLabelVisible = !isLabelVisible;
-        });
-
-        return mark;
-      });
     });
-
     return () => {
-      if (map) {
-        mrkrs.forEach((marker) => marker.destroy?.());
-        map.destroy();
-      }
+      mapRef.current?.destroy();
+      mapRef.current = null;
     };
   }, []);
+
+  // инициализируем маркеры
+  useEffect(() => {
+    if (!ready) return;
+    const api = apiRef.current;
+    const map = mapRef.current;
+    if (!api || !map) return;
+
+    const markers = markersData.map(({ coordinates, text }) => {
+      const marker: MarkerGL = new api.Marker(map, { coordinates });
+
+      let isLabelVisible = false;
+      marker.on("click", () => {
+        if (isLabelVisible) {
+          marker.setLabel({ text: "" });
+        } else {
+          marker.setLabel({ text: text });
+        }
+        isLabelVisible = !isLabelVisible;
+      });
+      return marker;
+    });
+    return () => {
+      markers.forEach((marker) => marker.destroy?.());
+    };
+  }, [ready, markersData]);
 
   return (
     <div className={styles.container}>
