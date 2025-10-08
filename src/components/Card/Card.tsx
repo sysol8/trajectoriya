@@ -1,67 +1,62 @@
 import styles from "./Card.module.css";
-import type { ICar, Field } from "../../utils/types.ts";
-import { useState } from "react";
-import Popup from "../Popup/Popup.tsx";
+import type { ICar } from "../../utils/types.ts";
 // @ts-ignore
 import DeleteIcon from "../../assets/icons/delete.svg?react";
 // @ts-ignore
 import EditIcon from "../../assets/icons/edit.svg?react";
+import { useBoundStore } from "../../store/store.ts";
+import { EditCarForm } from "../Form/Form.tsx";
+import { memo, useCallback } from "react";
 
 interface ICardProps extends ICar {
   onEdit?: () => void;
-  onDelete: () => void;
   isHovered: boolean;
 }
 
 function Card({
   id,
-  name: initialName,
+  name,
   model,
   year,
   color,
-  price: initialPrice,
+  price,
   latitude,
   longitude,
-  onDelete,
   isHovered,
 }: ICardProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [name, setName] = useState(initialName);
-  const [price, setPrice] = useState(initialPrice);
+  const removeCar = useBoundStore((state) => state.removeCar);
+  const openModal = useBoundStore((state) => state.openModal);
 
-  const editableFields: Field[] = [
-    {
-      label: "name",
-      title: "Название",
-      value: name,
-    },
-    {
-      label: "price",
-      title: "Цена",
-      value: price,
-    },
-  ];
+  const handleCardRemove = useCallback(() => {
+    removeCar(id);
+  }, [])
 
-  const handleSave = (values: Record<string, string>) => {
-    setName(values.name);
-    setPrice(Number(values.price));
-    setIsEditing(false);
-  };
+  const handleCardEdit = useCallback(() => {
+    const initialData = { name, price };
+    openModal(<EditCarForm id={id} initialData={initialData} />);
+  }, [])
 
   return (
     <>
       <article
         className={`${styles.card} ${isHovered ? styles.cardHovered : ""}`}
-        id={id}
+        id={`car-${id}`}
       >
         <div className={styles.text}>
           <h2 className={styles.heading}>
             {name} {model}
           </h2>
           <p className={styles.textContent}>Год выпуска: {year}</p>
-          <p className={styles.textContent}>Цена: {price}</p>
           <p className={styles.textContent}>
-            Координаты: {longitude}, {latitude}
+            {/* Если цена не указана, "отдаем бесплатно" */}
+            {price !== "0" ? `Цена: ${price}` : "Бесплатно"}
+          </p>
+          <p className={styles.textContent}>
+            {/* Если нет координат, отмечаем это. Также для карточек без координат на карте не ставится маркер.
+            В данном кейсе в качестве альтернативы можно генерировать рандомные координаты при создании карточки */}
+            {longitude === 0 && latitude === 0
+              ? "Местоположение неизвестно"
+              : `Координаты: ${longitude}, ${latitude}`}
           </p>
         </div>
         <div className={styles.colorContainer}>
@@ -72,24 +67,18 @@ function Card({
           ></span>
         </div>
         <div className={styles.buttons}>
-          <button className={styles.button} onClick={() => setIsEditing(true)}>
+          <button className={styles.button} onClick={handleCardEdit}>
             <EditIcon className={styles.icon} />
           </button>
-          <button className={styles.button} onClick={onDelete}>
+          <button className={styles.button} onClick={handleCardRemove}>
             <DeleteIcon className={styles.icon} />
           </button>
         </div>
       </article>
-      {isEditing && (
-        <Popup
-          fields={editableFields}
-          isOpen={isEditing}
-          onClose={() => setIsEditing(!isEditing)}
-          onSubmit={handleSave}
-        ></Popup>
-      )}
     </>
   );
 }
 
-export default Card;
+const memoizedCard = memo(Card);
+
+export default memoizedCard;
