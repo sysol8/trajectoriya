@@ -59,15 +59,15 @@ interface FallbackProps {
 function Fallback({ error, loading }: FallbackProps) {
   if (error)
     return (
-      <div className={styles.layout}>
+      <div className={styles.fallbackLayout}>
         <p className={styles.fallback}>{error}</p>
       </div>
     );
 
   if (loading)
     return (
-      <div className={styles.layout}>
-        <p className={styles.fallback}>Загрузка</p>
+      <div className={styles.fallbackLayout}>
+        <p className={styles.fallback}>Загрузка...</p>
       </div>
     );
 
