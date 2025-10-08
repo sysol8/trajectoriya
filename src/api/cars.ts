@@ -6,7 +6,7 @@ const parseJson = async <T>(response: Response): Promise<T> => {
   if (!response.ok) {
     throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
   }
-  const data: ICar[] = await response.json();
+  const data = await response.json();
   return data as T;
 };
 
@@ -15,7 +15,7 @@ const getCars = async (): Promise<ICar[]> => {
     method: "GET",
   });
 
-  return parseJson<ICar[]>(response);
+  return await parseJson<ICar[]>(response);
 };
 
 export { getCars };
