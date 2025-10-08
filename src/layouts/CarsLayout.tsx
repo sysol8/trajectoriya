@@ -41,7 +41,8 @@ function CarsLayout() {
             <h2 className="visually-hidden">Список автомобилей</h2>
             <CardList hoveredId={hoveredId}></CardList>
           </section>
-          <section>
+          {/* TODO: поправить секцию, чтоб выглядело красиво */}
+          <section className={styles.section}>
             <h2 className={styles.subheading}>Автомобили на карте</h2>
             <CarMap />
           </section>
