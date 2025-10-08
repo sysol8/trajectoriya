@@ -15,7 +15,7 @@
     ```bash
    npm run preview
    
-4. **Перейти на localhost:5173**
+4. **Перейти на localhost:4173**
 
 ## Демо
 
