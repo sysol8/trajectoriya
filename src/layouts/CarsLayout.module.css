@@ -30,3 +30,12 @@
   justify-self: center;
   padding-block-end: 1.2rem;
 }
+
+.fallback {
+  display: flex;
+  font-size: 3.6rem;
+  margin: auto;
+  background-color: var(--background-950);
+  color: var(--text-50);
+  border-radius: 8px;
+}
