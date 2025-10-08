@@ -1,0 +1,30 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  inline-size: 100%;
+  border-block-end: 3px solid var(--accent-800);
+  padding-inline: 2rem;
+  padding-block: 1.6rem;
+}
+
+.controls {
+  display: flex;
+  inline-size: 100%;
+  justify-content: space-between;
+}
+
+
+.add {
+  block-size: 3.6rem;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: end;
+}
+
+.addIcon {
+  block-size: 100%;
+  inline-size: 100%;
+}
