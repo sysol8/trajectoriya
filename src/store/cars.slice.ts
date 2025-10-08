@@ -7,6 +7,8 @@ type SortOrder = "asc" | "desc";
 
 export interface CarsSlice {
   cars: ICar[];
+  loading: boolean;
+  error: string | null;
   sortField: SortField;
   sortOrder: SortOrder;
 
@@ -25,15 +27,21 @@ const genId = () =>
 
 export const createCarsSlice: StateCreator<CarsSlice> = (set, get) => ({
   cars: [],
+  loading: false,
+  error: null,
   sortField: null,
   sortOrder: "asc",
 
   // здесь напрямую перезаписываем массив, чтобы данные не дублировались в стрикт-моде дев режима.
   getCars: async () => {
-    const result = await apiGetCars();
-    // но лучше было бы обновить стейт иммутабельно
-    // set((state) => ({ cars: [...state.cars, ...result] })
-    set({ cars: result });
+    set({ loading: true, error: null });
+    try {
+      const result = await apiGetCars();
+      set({ cars: result, loading: false });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Failed to load cars";
+      set({ error: message, loading: false });
+    }
   },
 
   createCar: (data) => {
@@ -65,7 +73,9 @@ export const createCarsSlice: StateCreator<CarsSlice> = (set, get) => ({
   setCoordinates: (id, [latitude, longitude]) => {
     set((state) => ({
       cars: state.cars.map((car) =>
-        car.id === id ? { ...car, latitude: latitude, longitude: longitude } : car,
+        car.id === id
+          ? { ...car, latitude: latitude, longitude: longitude }
+          : car,
       ),
     }));
   },
@@ -79,7 +89,9 @@ export const createCarsSlice: StateCreator<CarsSlice> = (set, get) => ({
     const nextOrder =
       order ??
       (curr.sortField === field
-        ? (curr.sortOrder === "asc" ? "desc" : "asc")
+        ? curr.sortOrder === "asc"
+          ? "desc"
+          : "asc"
         : "asc");
     set({ sortField: field, sortOrder: nextOrder });
   },
