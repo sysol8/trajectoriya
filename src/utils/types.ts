@@ -1,12 +1,17 @@
+export type Longitude = number;
+export type Latitude = number;
+
+export type TCoordinates = [Longitude, Latitude];
+
 export interface ICar {
   id: string;
   name: string;
   model: string;
-  year: number;
+  year: string;
   color: string;
-  price: number;
-  latitude: number;
-  longitude: number;
+  price: string;
+  latitude: Latitude;
+  longitude: Longitude;
 }
 
 export interface MapMarker {
@@ -20,5 +25,3 @@ export interface Field {
   value: string | number;
   editable?: boolean;
 }
-
-export type TCoordinates = [number, number];
