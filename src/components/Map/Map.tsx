@@ -2,12 +2,11 @@ import styles from "./Map.module.css";
 import type { Map as MapGL, Marker as MarkerGL } from "@2gis/mapgl/global";
 import {
   memo,
-  type NamedExoticComponent,
-  type ReactElement,
   useEffect,
   useMemo,
   useRef,
   useState,
+  forwardRef
 } from "react";
 import { load } from "@2gis/mapgl";
 import { useBoundStore } from "../../store/store.ts";
@@ -30,6 +29,7 @@ function Map() {
 
   const mapRef = useRef<MapGL | null>(null);
   const apiRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // инициализируем карту
   useEffect(() => {
@@ -37,7 +37,8 @@ function Map() {
       setReady(true);
       apiRef.current = mapglAPI;
 
-      mapRef.current = new mapglAPI.Map("map", {
+      if (!containerRef.current) return;
+      mapRef.current = new mapglAPI.Map(containerRef.current, {
         center: [30.31413, 59.93863],
         zoom: 9,
         key: import.meta.env.VITE_API_KEY,
@@ -77,20 +78,16 @@ function Map() {
 
   return (
     <div className={styles.container}>
-      <MapWrapper />
+      <MapWrapper ref={containerRef}/>
     </div>
   );
 }
 
-const MapWrapper: NamedExoticComponent = memo(
-  (): ReactElement => {
-    return (
-      <>
-        <div id="map" className={styles.map}></div>
-      </>
-    );
-  },
-  () => true,
+const MapWrapper = memo(
+  forwardRef<HTMLDivElement, {}>(function MapWrapper(_, ref) {
+    return <div ref={ref} className={styles.map}></div>;
+  }),
+  () => true
 );
 
 export default Map;
