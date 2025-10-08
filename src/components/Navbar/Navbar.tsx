@@ -1,26 +1,28 @@
-import type { ICar } from "../../utils/types.ts";
 import styles from "./Navbar.module.css";
+import { useBoundStore } from "../../store/store.ts";
 
 interface NavbarProps {
-  data: ICar[];
   onHover: (id: string) => void;
   onLeave: () => void;
 }
 
-function Navbar({ data, onHover, onLeave }: NavbarProps) {
+function Navbar({ onHover, onLeave }: NavbarProps) {
+  // здесь храним просто cars, смысла сортировать особо нет
+  const cars = useBoundStore(state => state.cars);
+
   return (
     <nav className={`${styles.nav} custom-scrollbar`}>
       <ul className={styles.list}>
-        {data.map((item) => {
+        {cars.map((car) => {
           return (
             <li
-              key={item.id}
+              key={car.id}
               className={styles.item}
-              onMouseEnter={() => onHover(item.id)}
+              onMouseEnter={() => onHover(car.id)}
               onMouseLeave={onLeave}
             >
-              <a href={`#${item.id}`} className={styles.link}>
-                {item.name} {item.model}
+              <a href={`#car-${car.id}`} className={styles.link}>
+                {car.name} {car.model}
               </a>
             </li>
           );
